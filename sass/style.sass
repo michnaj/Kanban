@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans')
+
+// COLOR variables
+$text-color: #000
+$bg-color: #fff
+$header-color: #fff
+$header-bg: #000
+$add-color: #2ecc71
+$edit-color: #3498db
+$del-color: #e74c3c
+$column-bg: #ecf0f1
+$header-col-bg: #9b59b6
+$border-color: #ccc
+
+// FONT variables
+$basic-font: 'Open Sans', sans-serif
+
+// RWD 
+$pc: "(max-width: 1199px)"
+$tablets: "(max-width: 991px)"
+$phones: "(max-width: 767px)"
+$small: "(max-width: 479px)"
+
+//MIXINS
+%mp0
+	margin: 0
+	padding: 0
+%circle-buttons
+	border: none
+	color: $header-color
+	width: 36px
+	height: 36px
+	line-height: 36px
+	font-size: 20px
+	position: absolute
+	border-radius: 50%
+
+=translate($posX, $posY)
+	-ms-transform: translate($posX, $posY)
+	-webkit-transform: translate($posX, $posY)
+	transform: translate($posX, $posY)
+=scale($x, $y)
+	-ms-transform: scale($x, $y)
+	-webkit-transform: scale($x, $y)
+	transform: scale($x, $y)
+=transition($transition)
+	-webkit-transition: $transition
+	-moz-transition:    $transition
+	transition:         $transition
+// GLOBAL styles
+*
+	box-sizing: border-box
+body 
+	margin: 0
+	font-family: $basic-font
+	color: $text-color
+	background: $header-bg url(../images/abstract_bg.jpg) center no-repeat
+	background-attachment: fixed
+	background-size: cover
+.container
+	width: 100%
+	max-width: 1170px
+	margin: 0 auto
+	padding: 20px 0
+h1, h2, h3
+	@extend %mp0
+button
+	+transition(.4s)
+	&:hover
+		cursor: pointer
+.hide
+	display: none
+// only for screen readers
+.sr-only
+	clip: rect(1px, 1px, 1px, 1px)
+	overflow: hidden
+	display: none
+	position: absolute !important
+/* HEADER */
+header
+	position: absolute
+	top: 0
+	left: 0
+	right: 0
+	text-align: center
+	background: rgba(100,100,100,0.5)
+	color: $header-color
+	h1
+		font-size: 36px
+		line-height: 60px
+	.container
+		position: relative
+		padding: 0
+	button
+		position: absolute
+		right: 10px
+		top: 50%
+		+translate(0, -50%)
+		padding: 10px 30px
+		font-size: 16px
+		font-weight: bold
+		background: $add-color
+		color: $header-color
+		border: none
+		border-radius: 5px
+		&:hover
+			background: darken($add-color, 8%)
+		.fa
+			margin-right: 5px
+// RWD HEADER
+@media #{$phones}
+	header
+		button
+			position: relative
+			+translate(0,0)
+			margin-bottom: 10px
+/* MAIN */
+.main
+	padding-top: 60px
+	padding-bottom: 30px
+	overflow: auto
+@media #{$phones}
+	.main
+		padding-top: 100px
+/* BUTTONS */
+.btn-delete
+	@extend %circle-buttons
+	background: $del-color
+	top: 8px
+	right: 10px
+	&:hover
+		background: darken($del-color, 10%)
+.btn-edit
+	@extend %circle-buttons
+	background: $edit-color
+	top: 8px
+	right: 50px
+	&:hover
+		background: darken($edit-color, 10%)
+.card
+	.btn-edit
+		right: 40px
+.add-card
+	@extend %circle-buttons
+	background: $add-color
+	bottom: 8px
+	right: 10px
+	&:hover
+		background: darken($add-color, 10%)
+/* COLUMNS */
+#board
+	margin: 0 10px	
+	display: flex
+	justify-content: flex-start
+	flex-direction: row
+	flex-wrap: wrap
+	position: relative
+	.column
+		align-self: flex-start
+		position: relative
+		padding-bottom: 50px
+		margin-right: 2%
+		margin-bottom: 20px
+		width: 32%
+		background: $column-bg
+		border-radius: 5px
+		box-shadow: 2px 2px 10px #fff
+		&:nth-of-type(3n+0)
+			margin-right: 0
+		h2
+			padding: 10px 90px 10px 10px
+			background: $header-col-bg
+			color: $header-color
+			border-radius: 5px 5px 0 0
+// RWD OF COLUMNS
+@media #{$tablets}
+	#board
+		.column
+			margin-right: 2%
+			width: 49%
+			&:nth-of-type(3n+0)
+				margin-right: 2%
+			&:nth-of-type(2n+0)
+				margin-right: 0
+@media #{$phones}
+	#board
+		.column
+			margin-right: 0 !important
+			width: 100%
+/* CARDS */
+.column-card-list
+	margin: 0
+	padding: 10px 10px 0 10px
+	min-height: 50px
+	list-style-type: none
+	li
+		@extend %mp0
+		position: relative
+		padding: 2px 80px 2px 10px
+		border-bottom: 1px dashed $border-color
+		&:hover
+			cursor: move
+		&:last-of-type
+			border: none
+		.btn-delete
+			top: 10px
+			right: 0
+.card.ui-sortable-helper
+	border: none
+	button
+		display: none
+.card-placeholder
+	display: block
+	background: rgba(46,204,113,0.3)
+	height: 50px
+	border-top: 1px dashed red !important
+	border-bottom: 1px dashed red !important
+/* Dialogs */
+.ui.widget-overlay
+	background: rgba(0,0,0,0.5)
+.dialog
+	input.text
+		padding: 5px 10px
+		width: 100%
+		line-height: 24px
+		&.required
+			box-shadow: 0px 0px 5px red
+/* FOOTER */
+footer
+	position: fixed
+	bottom: 0
+	left: 0
+	right: 0
+	text-align: center
+	background: $text-color
+	padding: 10px 0
+	color: darken($header-color, 30%)
