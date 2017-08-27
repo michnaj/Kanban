@@ -1,15 +1,35 @@
+const prefix = "https://cors-anywhere.herokuapp.com/";
+const apiUrl = "https://kodilla.com/pl/bootcamp-api";
+const baseUrl = prefix + apiUrl;
+let myHeaders = {
+	"X-Client-Id": "2044",
+	"X-Auth-Token": "5e4acaf01a565b93f5a3fd5910a5ded9"
+};
+
+function setupColumns(columns) {
+	columns.forEach(function(column) {
+		let col = new Column(column.id, column.name);
+		board.addColumn(col);
+		setupCards(col, column.cards);
+	});
+}
+
+function setupCards(column, cards) {
+	cards.forEach(function(card) {
+		column.addCard(new Card(card.id, card.name, card.bootcamp_kanban_column_id));
+	});
+}
+
 $(function() {
-	let todoColumn = new Column("To do");
-	let doingColumn = new Column("Doing");
-	let doneColumn = new Column("Done");
+	$.ajaxSetup({
+		headers: myHeaders
+	});
 
-	board.addColumn(todoColumn);
-	board.addColumn(doingColumn);
-	board.addColumn(doneColumn);
-
-	let card1 = new Card("New task");
-	let card2 = new Card("Create kanban boards");
-
-	todoColumn.addCard(card1);
-	doingColumn.addCard(card2);
+	$.ajax({
+		url: baseUrl + "/board",
+		method: "GET",
+		success: function(response) {
+			setupColumns(response.columns);
+		}
+	});
 });

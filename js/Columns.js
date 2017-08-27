@@ -1,6 +1,6 @@
-function Column(name) {
+function Column(id, name) {
 	let self = this;
-	this.id = randomString();
+	this.id = id;
 	this.name = name || "New column";
 	this.$element = createColumn();
 
@@ -38,6 +38,13 @@ Column.prototype = {
 		this.$element.children("ul").append(card.$element);
 	},
 	removeColumn: function() {
-		this.$element.remove();
+		let self = this;
+		$.ajax({
+			url: baseUrl + "/column/" + self.id,
+			method: "DELETE",
+			success: function(response) {
+				self.$element.remove();
+			}
+		});
 	}
 };

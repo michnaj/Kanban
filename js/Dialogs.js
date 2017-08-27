@@ -12,12 +12,34 @@ function addElement(type, element) {
 		},
 		buttons: {
 			"Save": function() {
-				let $input = $inputDialog.find("#name");
-				if ($input.val() === "") {
-					$input.addClass("required");
+				let newName = $inputDialog.find("#name").val();
+				if (newName === "") {
+					$inputDialog.find("#name").addClass("required");
 				} else {
-					if (type === "card") element.addCard(new Card($input.val()));
-					else if (type === "column") element.addColumn(new Column($input.val()));
+					if (type === "card") {
+						$.ajax({
+							url: baseUrl + "/card",
+							method: "POST",
+							data: {
+								name: newName,
+								bootcamp_kanban_column_id: element.id
+							},
+							success: function(response) {
+								element.addCard(new Card(response.id, newName));
+							}
+						});
+					} else if (type === "column") {
+						$.ajax({
+							url: baseUrl + "/column",
+							method: "POST",
+							data: {
+								name: newName
+							},
+							success: function(response) {
+								element.addColumn(new Column(response.id, newName));
+							}
+						});
+					}
 					$inputDialog.dialog("close");
 				}
 			},
@@ -60,7 +82,7 @@ function deleteElement(type, element) {
 		}
 	});
 	let name = element.name;
-	if (type === "card") name = element.description;
+	if (type === "card") name = element.name;
 	setConfirmText(type, $confirmDialog, name);
 	$confirmDialog.dialog("open");
 }
@@ -70,8 +92,8 @@ function setInputText(type, $dialog) {
 	let placeholder = "Enter a value";
 	if (type === "card" ) {
 		title = "Add new card";
-		label = "Card description";
-		placeholder = "Enter new card description";
+		label = "Card name";
+		placeholder = "Enter new card name";
 	} else if (type === "column") {
 		title = "Add new column";
 		label = "Column name";

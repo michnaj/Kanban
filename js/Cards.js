@@ -1,18 +1,18 @@
-function Card(description) {
+function Card(id, name) {
 	let self = this;
-	this.id = randomString();
-	this.description = description || "New task";
+	this.id = id;
+	this.name = name || "New task";
 	this.$element = createCard();
 
 	function createCard() {
 		let $card = $("<li>").addClass("card");
-		let $cardDescription = $("<p>").addClass("card-description").text(self.description);
+		let $cardName = $("<p>").addClass("card-name").text(self.name);
 		let $cardEdit = $("<button>").addClass("btn-edit").html(getFontAwesome("pencil") + getSrText("edit card"));
 		let $cardDelete = $("<button>").addClass("btn-delete").html(getFontAwesome("trash") + getSrText("Delete card"));
 
 		$cardEdit.click(function(event) {
 			event.preventDefault();
-			alert("Edit Card: " + self.description);
+			alert("Edit Card: " + self.name);
 		});
 		$cardDelete.click(function(event) {
 			event.preventDefault();
@@ -21,12 +21,19 @@ function Card(description) {
 
 		$card.append($cardEdit)
 			.append($cardDelete)
-			.append($cardDescription);
+			.append($cardName);
 		return $card;
 	}
 }
 Card.prototype = {
 	removeCard: function() {
-		this.$element.remove();
+		let self = this;
+		$.ajax({
+			url: baseUrl + "/card/" + self.id,
+			method: "DELETE",
+			success: function() {
+				self.$element.remove();
+			}
+		});
 	}
 };
