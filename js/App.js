@@ -1,8 +1,5 @@
-//const prefix = "https://cors-anywhere.herokuapp.com/";
-const prefix = "";
-const apiUrl = "https://kodilla.com/pl/bootcamp-api";
-const baseUrl = prefix + apiUrl;
-let myHeaders = {
+const baseUrl = "https://kodilla.com/pl/bootcamp-api";
+const myHeaders = {
 	"X-Client-Id": "2044",
 	"X-Auth-Token": "5e4acaf01a565b93f5a3fd5910a5ded9"
 };
