@@ -58,7 +58,7 @@ module.exports = {
         "jquery/no-map": 2,
         "jquery/no-merge": 2,
         "jquery/no-param": 2,
-        "jquery/no-parent": 2,
+        "jquery/no-parent": 0,
         "jquery/no-parents": 2,
         "jquery/no-parse-html": 2,
         "jquery/no-prop": 2,

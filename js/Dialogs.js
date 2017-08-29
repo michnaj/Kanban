@@ -1,8 +1,8 @@
 function addElement(type, element) {
-	let $inputDialog = $("#input-form").dialog({
+	let $addDialog = $("#add-form").dialog({
 		autoOpen: false,
 		minHeight: 100,
-		width: 400,
+		width: 300,
 		modal: true,
 		closeOnEscape: false,
 		draggable: false,
@@ -12,9 +12,9 @@ function addElement(type, element) {
 		},
 		buttons: {
 			"Save": function() {
-				let newName = $inputDialog.find("#name").val();
+				let newName = $addDialog.find("#name").val();
 				if (newName === "") {
-					$inputDialog.find("#name").addClass("required");
+					$addDialog.find("#name").addClass("required");
 				} else {
 					if (type === "card") {
 						$.ajax({
@@ -40,27 +40,86 @@ function addElement(type, element) {
 							}
 						});
 					}
-					$inputDialog.dialog("close");
+					$addDialog.dialog("close");
 				}
 			},
 			Cancel: function() {
-				$inputDialog.dialog("close");
+				$addDialog.dialog("close");
 			} 
 		},
 		close: function() {
-			$inputDialog.find("#name").val("");
-			$inputDialog.find("#name").removeClass("required");
+			$addDialog.find("#name").val("");
+			$addDialog.find("#name").removeClass("required");
 		}   
 	});
-	setInputText(type, $inputDialog);
-	$inputDialog.dialog("open");
+	setAddText(type, $addDialog);
+	$addDialog.dialog("open");
 }
-// Confirm dialog
+function editElement(type, element) {
+	let $editDialog = $("#edit-form").dialog({
+		autoOpen: false,
+		minHeight: 100,
+		width: 300,
+		modal: true,
+		closeOnEscape: false,
+		draggable: false,
+		resizable: false,
+		open: function() {
+			$(".ui-dialog-titlebar-close").hide();
+		},
+		buttons: {
+			"Save": function() {
+				let newName = $editDialog.find("#edit-name").val();
+				if (newName === "") {
+					$editDialog.find("#edit-name").addClass("required");
+				} else {
+					if (type === "card") {
+						$.ajax({
+							url: baseUrl + "/card/" + element.id,
+							method: "PUT",
+							data: {
+								name: newName,
+								bootcamp_kanban_column_id: element.columnId
+							},
+							success: function() {
+								element.name = newName;
+								element.$element.find(".card-name").text(newName);
+							}
+						});
+					} else if (type === "column") {
+						$.ajax({
+							url: baseUrl + "/column/" + element.id,
+							method: "PUT",
+							data: {
+								name: newName
+							},
+							success: function() {
+								element.name = newName;
+								element.$element.find(".column-title").text(newName);
+							}
+						});
+					}
+					$editDialog.dialog("close");
+				}
+			},
+			Cancel: function() {
+				$editDialog.dialog("close");
+			} 
+		},
+		close: function() {
+			$editDialog.find("#edit-name").val("");
+			$editDialog.find("#edit-name").removeClass("required");
+		}   
+	});
+	let oldName = element.name;
+	setEditText(type, $editDialog, oldName);
+	$editDialog.dialog("open");
+}
 function deleteElement(type, element) {
-	let $confirmDialog = $("#confirm-dialog").dialog({
+	let $deleteDialog = $("#delete-dialog").dialog({
 		autoOpen: false,
 		minHeight: 150,
-		width: 400,
+		width: 300,
 		modal: true,
 		closeOnEscape: false,
 		draggable: false,
@@ -72,39 +131,50 @@ function deleteElement(type, element) {
 			"Yes": function() {
 				if (type === "card") element.removeCard();
 				else if (type === "column") element.removeColumn();
-				$confirmDialog.dialog("close");
+				$deleteDialog.dialog("close");
 				return true;
 			},
 			"No": function() {
-				$confirmDialog.dialog("close");
+				$deleteDialog.dialog("close");
 				return true;
 			} 
 		}
 	});
 	let name = element.name;
 	if (type === "card") name = element.name;
-	setConfirmText(type, $confirmDialog, name);
-	$confirmDialog.dialog("open");
+	setDeleteText(type, $deleteDialog, name);
+	$deleteDialog.dialog("open");
 }
-function setInputText(type, $dialog) {
+function setAddText(type, $dialog) {
 	let title = "Enter name";
 	let label = "Name";
 	let placeholder = "Enter a value";
-	if (type === "card" ) {
-		title = "Add new card";
-		label = "Card name";
-		placeholder = "Enter new card name";
-	} else if (type === "column") {
-		title = "Add new column";
-		label = "Column name";
-		placeholder = "Enter new column name";
+	if (type.length > 0) {
+		title = "Add new " + type;
+		label = type.capitalizeFirstLetter() + " name";
+		placeholder = "Name of the new " + type;
 	}
 	$(".ui-dialog-title").text(title);
 	$dialog.find($("label")).text(label);
 	$dialog.find($("#name")).attr("placeholder", placeholder);
 }
-function setConfirmText(type, $dialog, name) {
-	$(".ui-dialog-title").text("Delete item?");
+function setEditText(type, $dialog, oldName) {
+	let title = "Enter name";
+	let label = "Name";
+	let placeholder = "Enter a value";
+	if (type.length > 0) {
+		title = "Edit " + type;
+		label = "New " + type + " name";
+		placeholder = "New " + type + " name";
+	}
+	$(".ui-dialog-title").text(title);
+	$dialog.find("#edit-object").text(type);
+	$dialog.find("#edit-obj-name").text(oldName);
+	$dialog.find($("label")).text(label);
+	$dialog.find($("#edit-name")).attr("placeholder", placeholder);
+}
+function setDeleteText(type, $dialog, name) {
+	$(".ui-dialog-title").text("Delete " + type);
 	$dialog.find("#delete-object").text(type);
 	$dialog.find("#delete-name").text(name);
 }

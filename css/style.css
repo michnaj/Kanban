@@ -53,7 +53,7 @@ header {
   left: 0;
   right: 0;
   text-align: center;
-  background: rgba(100, 100, 100, 0.5);
+  background: rgba(52, 73, 94, 0.5);
   color: #fff; }
   header h1 {
     font-size: 36px;
@@ -197,12 +197,14 @@ header {
 .ui.widget-overlay {
   background: rgba(0, 0, 0, 0.5); }
 
-.dialog input.text {
-  padding: 5px 10px;
-  width: 100%;
-  line-height: 24px; }
-  .dialog input.text.required {
-    box-shadow: 0px 0px 5px red; }
+.dialog {
+  font-size: 16px; }
+  .dialog input.text {
+    padding: 5px 10px;
+    width: 100%;
+    line-height: 24px; }
+    .dialog input.text.required {
+      box-shadow: 0px 0px 5px red; }
 
 /* FOOTER */
 footer {
