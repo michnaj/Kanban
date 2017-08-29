@@ -1,4 +1,5 @@
-const prefix = "https://cors-anywhere.herokuapp.com/";
+//const prefix = "https://cors-anywhere.herokuapp.com/";
+const prefix = "";
 const apiUrl = "https://kodilla.com/pl/bootcamp-api";
 const baseUrl = prefix + apiUrl;
 let myHeaders = {
